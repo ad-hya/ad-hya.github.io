@@ -332,10 +332,27 @@
   .project-card {
     background: var(--bg);
     padding: 2rem;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.25s, box-shadow 0.25s;
   }
 
-  .project-card:hover { background: var(--white); }
+  .project-card:hover {
+    background: var(--white);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(14,14,14,0.06);
+    position: relative;
+    z-index: 2;
+  }
+
+  .project-card.cta-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .project-card.cta-card .project-title { margin-bottom: 0.25rem; }
+  .project-card.cta-card p { color: var(--muted); font-size: 14px; }
 
   .project-num {
     font-family: 'DM Mono', monospace;
@@ -547,6 +564,67 @@
     letter-spacing: 0.06em;
   }
 
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: var(--ink);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 10px 18px;
+    border-radius: 3px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 200;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* BACK TO TOP */
+  .back-to-top {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s;
+    z-index: 150;
+  }
+
+  .back-to-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .back-to-top:hover { background: var(--muted); }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     .nav-links { display: none; }
@@ -602,12 +680,12 @@
   </div>
   <div class="hero-right">
     <div class="hero-stat">
-      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-num" data-target="5">0</div>
       <div class="hero-stat-label">Projects</div>
     </div>
     <div class="hero-divider"></div>
     <div class="hero-stat">
-      <div class="hero-stat-num">4</div>
+      <div class="hero-stat-num" data-target="4">0</div>
       <div class="hero-stat-label">Roles</div>
     </div>
     <div class="hero-divider"></div>
@@ -677,7 +755,7 @@
   <div class="section-label">Selected projects</div>
   <div class="projects-grid">
 
-    <div class="project-card">
+    <div class="project-card reveal">
       <div class="project-num">01</div>
       <h3 class="project-title">E-Commerce Analytics Pipeline</h3>
       <p class="project-desc">An end-to-end Snowflake data warehouse and Power BI dashboard built on ~100K e-commerce orders, including a star schema design and a controlled query performance optimization study.</p>
@@ -694,7 +772,7 @@
       </div>
     </div>
 
-    <div class="project-card">
+    <div class="project-card reveal">
       <div class="project-num">02</div>
       <h3 class="project-title">BiteRush</h3>
       <p class="project-desc">A full-stack food ordering application with a Vue 3 frontend and an Express/PostgreSQL backend, integrating a third-party recipe API for dynamic menu data.</p>
@@ -711,7 +789,7 @@
       </div>
     </div>
 
-    <div class="project-card">
+    <div class="project-card reveal">
       <div class="project-num">03</div>
       <h3 class="project-title">NexLearn AI</h3>
       <p class="project-desc">An AI-powered academic decision-support system integrating Canvas and Google Calendar to automate scheduling and surface student engagement risks.</p>
@@ -728,7 +806,7 @@
       </div>
     </div>
 
-    <div class="project-card">
+    <div class="project-card reveal">
       <div class="project-num">04</div>
       <h3 class="project-title">Airline Delay Prediction</h3>
       <p class="project-desc">End-to-end ML pipeline using U.S. DOT flight data to predict delay likelihood and identify the true drivers of delay propagation.</p>
@@ -745,7 +823,7 @@
       </div>
     </div>
 
-    <div class="project-card">
+    <div class="project-card reveal">
       <div class="project-num">05</div>
       <h3 class="project-title">Join Ordering &amp; Query Optimization</h3>
       <p class="project-desc">Simulated adaptive join ordering strategies under memory and selectivity constraints to support data-driven system optimization decisions.</p>
@@ -761,6 +839,14 @@
       </div>
     </div>
 
+    <a href="https://github.com/ad-hya" target="_blank" style="text-decoration:none; color:inherit;">
+      <div class="project-card cta-card reveal">
+        <div class="project-num">→</div>
+        <h3 class="project-title">More on GitHub</h3>
+        <p>Explore the full codebase for these projects, plus everything else I've been building.</p>
+      </div>
+    </a>
+
   </div>
 </section>
 
@@ -769,7 +855,7 @@
   <div class="section-label">Experience</div>
   <div class="exp-list">
 
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div class="exp-meta">
         <div class="exp-role">Software Engineering Intern</div>
         <div class="exp-company">Mezeh Mediterranean Grill</div>
@@ -782,20 +868,20 @@
       </ul>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div class="exp-meta">
         <div class="exp-role">Teaching Assistant, ASCEND Fellows Program</div>
         <div class="exp-company">Robert H. Smith School of Business, UMD</div>
-        <div class="exp-date">2026 — Present</div>
+        <div class="exp-date">Fall 2026</div>
         <div class="exp-date">College Park, USA</div>
       </div>
       <ul class="exp-bullets">
-        <li>Built Excel-based program management infrastructure, including applicant scoring rubrics and status tracking.</li>
-        <li>Processed multi-source data for the Smith School's annual Study Abroad report across all eight BMGT majors.</li>
+        <li>Supporting program operations and student engagement for the ASCEND Fellows Program under Prof. Wendy Sanhai.</li>
+        <li>Building program management infrastructure, including applicant scoring and status tracking systems.</li>
       </ul>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div class="exp-meta">
         <div class="exp-role">Impact Consulting Fellow</div>
         <div class="exp-company">University of Maryland</div>
@@ -808,7 +894,7 @@
       </ul>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item reveal">
       <div class="exp-meta">
         <div class="exp-role">ML &amp; AI Intern</div>
         <div class="exp-company">eSec Security Consultants — Team Obzerve</div>
@@ -861,6 +947,9 @@
   <span class="footer-copy">Data &amp; AI — College Park, MD</span>
 </footer>
 
+<a href="#hero" class="back-to-top" id="back-to-top" aria-label="Back to top">↑</a>
+<div class="toast" id="toast"></div>
+
 <script>
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobile-menu');
@@ -883,6 +972,70 @@
       }
     });
   });
+
+  /* SCROLL REVEAL */
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  /* HERO STAT COUNT-UP */
+  const statEls = document.querySelectorAll('.hero-stat-num[data-target]');
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.getAttribute('data-target'), 10);
+      let current = 0;
+      const duration = 700;
+      const start = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        current = Math.round(progress * target);
+        el.textContent = current;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      statObserver.unobserve(el);
+    });
+  }, { threshold: 0.4 });
+  statEls.forEach(el => statObserver.observe(el));
+
+  /* BACK TO TOP */
+  const backToTop = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+
+  /* EMAIL COPY TOAST */
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  const emailLink = document.querySelector('a[href^="mailto:"]');
+  if (emailLink) {
+    emailLink.addEventListener('click', () => {
+      const email = emailLink.getAttribute('href').replace('mailto:', '');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(email).then(() => showToast('Email copied to clipboard'));
+      }
+    });
+  }
 </script>
 
 </body>
